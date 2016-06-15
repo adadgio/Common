@@ -1,0 +1,19 @@
+{
+    "name": "adadgio/common",
+    "type": "library",
+    "description": "Adadgio Commons",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Romain BRUCKERT",
+            "email": "romain.bruckert.esc@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3"
+    },
+    "autoload": {
+        "psr-0": { "Adadgio\\Common\\": "" },
+        "psr-4": { "Adadgio\\Common\\": "" }
+    }
+}
