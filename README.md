@@ -8,6 +8,12 @@ Install with composer
 composer require adadgio/common-bundle
 ```
 
+Add the bundle to your app kernel.
+
+```php
+new Adadgio\GearBundle\AdadgioGearBundle(),
+```
+
 # Curl
 
 To do Curl requests (get or post) and return results
