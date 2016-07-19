@@ -14,7 +14,7 @@ Add the bundle to your app kernel.
 new Adadgio\GearBundle\AdadgioGearBundle(),
 ```
 
-# Curl
+## Curl
 
 To do Curl requests (get or post) and return results
 
@@ -34,14 +34,14 @@ $response = $curl->post('http://example.com', array(
 
 ```
 
-# Urlizer
+## Urlizer
 
 Help to check if an URL is relative or aboslute, normalise an URL, get protocol, check protocol less...
 
 All methods are commented in [Urlizer.php](Urlizer.php)
 
 
-# ParamResolver
+## ParamResolver
 
 Two methods let to know if value is a valid array or valid integer (>0). If it's not the case, return default value parameter.
 
@@ -66,4 +66,23 @@ $array = ParamResolver::toArray($arrayToTest, $defaultArray);
 use Adadgio\Common\ParamResolver;
 
 $integer = ParamResolver::toInt(430, 0);
+```
+
+## JsonResponse
+
+A custom easy response object handler to respond with JSON data
+
+```php
+use Adadgio\Common\JsonResponse;
+
+// $data is an object or an array
+$data = array('yes' => 'no', 'bar' => 'foo');
+
+// default response code is 200
+$code = 200;
+
+// specific headers, default: array()
+$headers = array();
+
+$array = JsonResponse::fire($data, $code, $headers);
 ```
