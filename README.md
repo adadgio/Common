@@ -8,12 +8,6 @@ Install with composer
 composer require adadgio/common-bundle
 ```
 
-Add the bundle to your app kernel.
-
-```php
-new Adadgio\GearBundle\AdadgioCommonBundle(),
-```
-
 ## Table of contents
 
 1. [Curl](#curl)
@@ -76,7 +70,7 @@ $integer = ParamResolver::toInt(430, 0);
 
 ## <a name="json-response"></a>JsonResponse
 
-A custom easy response object handler to respond with JSON data. Of course you could use Symfony JsonResponse from there http foundation component, but, hey, if you've already tried this with ajax requests and HTML template in them... good luck with that !
+A custom easy response object handler to respond with JSON data
 
 ```php
 use Adadgio\Common\JsonResponse;
