@@ -76,7 +76,7 @@ $integer = ParamResolver::toInt(430, 0);
 
 ## <a name="json-response"></a>JsonResponse
 
-A custom easy response object handler to respond with JSON data
+A custom easy response object handler to respond with JSON data. Of course you could use Symfony JsonResponse from there http foundation component, but, hey, if you've already tried this with ajax requests and HTML template in them... good luck with that !
 
 ```php
 use Adadgio\Common\JsonResponse;
