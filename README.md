@@ -11,7 +11,7 @@ composer require adadgio/common-bundle
 Add the bundle to your app kernel.
 
 ```php
-new Adadgio\GearBundle\AdadgioGearBundle(),
+new Adadgio\GearBundle\AdadgioCommonBundle(),
 ```
 
 ## Table of contents
