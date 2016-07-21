@@ -22,16 +22,38 @@ To do Curl requests (get or post) and return results
 ```php
 use Adadgio\Common\Urlizer\Curl;
 
+$params = array(
+    'id'    => 102,
+);
+
+// GET request
 $curl = new Curl();
+$response = $curl
+    ->setUrl('http://example.com')
+    ->setParams($params)
+    ->get();
 
-// GET method
-$response = $curl->get('http://example.com');
+// Same GET request with a simple format
+$response = $curl->get('http://example.com', $params);
 
-//or POST method with params
-$response = $curl->post('http://example.com', array(
-    'param' => 'value',
-    'foo'   => 'val',
-));
+// or POST request with params
+$curl = new Curl();
+$response = $curl->setUrl('http://example.com')
+    ->setParams($params)
+    ->setContentType('application/json')
+    ->post();
+
+// POST request with more options
+$curl = new Curl();
+$response = $curl->setUrl('http://example.com')
+            ->setParams($params)
+            ->addParam('foo','bar')
+            ->addOption(CURLOPT_SSL_VERIFYPEER, true)
+            ->setContentType('application/json')
+            ->setAuthorization('username', 'pass')
+            ->setCookie()
+            ->setRandomUserAgent()
+            ->post();
 ```
 
 ## <a name="urlizer"></a>Urlizer
