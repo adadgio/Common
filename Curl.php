@@ -92,7 +92,7 @@ class Curl
      *
      * @return {integer} Http status code
      */
-    public function getResponseStatusCode()
+    public function getCode()
     {
         return $this->code;
     }
@@ -105,6 +105,16 @@ class Curl
     public function getResponse()
     {
         return $this->response;
+    }
+
+    /**
+     * Get request json response.
+     *
+     * @return {string} Http json response
+     */
+    public function getJsonResponse()
+    {
+        return json_decode($this->response, true);
     }
 
     /**
