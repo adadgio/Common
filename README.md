@@ -11,7 +11,7 @@ composer require adadgio/common-bundle
 ## Table of contents
 
 1. [Curl](#curl)
-2. [Urlizer](#urlizer)
+2. [UrlHelper](#urlhelper)
 3. [ParamResolver](#param-resolver)
 4. [JsonResponse](#json-response)
 
@@ -56,11 +56,11 @@ $response = $curl->setUrl('http://example.com')
             ->post();
 ```
 
-## <a name="urlizer"></a>Urlizer
+## <a name="urlhelper"></a>UrlHelper
 
 Help to check if an URL is relative or aboslute, normalise an URL, get protocol, check protocol less...
 
-All methods are commented in [Urlizer.php](Urlizer.php)
+All methods are commented in [UrlHelper.php](UrlHelper.php)
 
 
 ## <a name="param-resolver"></a>ParamResolver

@@ -2,7 +2,7 @@
 
 namespace Adadgio\Common;
 
-class Urlizer
+class UrlHelper
 {
     const HTTP = 'http://';
     const HTTPS = 'https://';
@@ -161,5 +161,19 @@ class Urlizer
     public static function isAbsolute($url)
     {
         return !self::isRelative($url);
+    }
+
+    /**
+     * @param string url
+     * @param boolean
+     */
+    public static function isRemote($url)
+    {
+        $parsed = parse_url($url);
+
+        return (
+            isset($parsed['scheme'])
+            && in_array($parsed['scheme'], array('http', 'https', 'ftp', 'sftp'))
+        ) ? true : false;
     }
 }
