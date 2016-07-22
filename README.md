@@ -20,7 +20,7 @@ composer require adadgio/common-bundle
 To do Curl requests (get or post) and return results
 
 ```php
-use Adadgio\Common\Urlizer\Curl;
+use Adadgio\Common\Curl;
 
 $params = array(
     'id'    => 102,
