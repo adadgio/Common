@@ -325,7 +325,7 @@ class Curl
 
         // transform params array to URL params
         if (!empty($this->params)) {
-            $this->url .= '?' . http_build_query($this->params);
+            $this->setUrl($this->url . '?' . http_build_query($this->params));
         }
 
         $this->exec();
