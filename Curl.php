@@ -21,6 +21,11 @@ class Curl
     protected $curl;
 
     /**
+     * @var string URL targeted
+     */
+    protected $url;
+
+    /**
      * @var integer Http status code.
      */
     protected $code;
@@ -76,6 +81,7 @@ class Curl
      */
     public function setUrl($url)
     {
+        $this->url = $url;
         $this->addOption(CURLOPT_URL, $url);
 
         return $this;
