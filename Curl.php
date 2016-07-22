@@ -112,9 +112,9 @@ class Curl
      *
      * @return {string} Http json response
      */
-    public function getJsonResponse()
+    public function getJsonResponse($boolean = true)
     {
-        return json_decode($this->response, true);
+        return json_decode($this->response, $boolean);
     }
 
     /**
