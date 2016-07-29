@@ -11,7 +11,7 @@ composer require adadgio/common-bundle
 ## Table of contents
 
 1. [Curl](#curl)
-2. [UrlHelper](#urlhelper)
+2. [UrlHelper](#url-helper)
 3. [ParamResolver](#param-resolver)
 4. [JsonResponse](#json-response)
 
@@ -56,7 +56,7 @@ $response = $curl->setUrl('http://example.com')
             ->post();
 ```
 
-## <a name="urlhelper"></a>UrlHelper
+## <a name="url-helper"></a>UrlHelper
 
 Help to check if an URL is relative or aboslute, normalise an URL, get protocol, check protocol less...
 
@@ -107,4 +107,28 @@ $code = 200;
 $headers = array();
 
 $array = JsonResponse::fire($data, $code, $headers);
+```
+
+## <a name="human-date"></a>HumanDate
+
+This tool return an human date to display, like few some seconds...
+Default referential is the current date and time, a custom referential can be set in second parameter.
+
+```php
+use Adadgio\Common\HumanDate;
+
+// Examples with referential date: 2016-07-29 12:00:00
+
+HumanDate::format(new \DateTime('2016-06-29 09:00:00'));
+// 09:00
+
+HumanDate::format(new \DateTime('2016-07-28 22:00:00'));
+// Yesterday
+
+HumanDate::format(new \DateTime('2016-07-29 12:00:00'));
+// Now
+
+HumanDate::format(new \DateTime('2016-07-29 11:59:55'));
+// 5 seconds
+
 ```
