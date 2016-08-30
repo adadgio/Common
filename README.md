@@ -5,7 +5,7 @@
 Install with composer
 
 ```bash
-composer require adadgio/common-bundle
+composer require adadgio/common
 ```
 
 ## Table of contents
