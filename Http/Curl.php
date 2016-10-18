@@ -25,11 +25,11 @@ class Curl
      * Default supported content types
      */
     private $contentTypes = array(
-        XML => 'application/xml',
-        TEXT => 'text/plain',
-        JSON => 'application/json',
-        FORM_MULTIPART => 'multipart/form-data',
-        FORM_URLENCODED => 'application/x-www-form-urlencoded',
+        'xml' => 'application/xml',
+        'text' => 'text/plain',
+        'json' => 'application/json',
+        'form_multipart' => 'multipart/form-data',
+        'form_urlencoded' => 'application/x-www-form-urlencoded',
     );
 
     /**
@@ -64,6 +64,7 @@ class Curl
     {
         $this->curl = curl_init();
         $this->headers = array();
+        $this->configureDefaultsOptions();
     }
 
     public function getCode()
@@ -80,6 +81,7 @@ class Curl
     {
         // concat http get string if
         if (!empty($getParams)) {
+            // note that http_build_query already encodes url/url partials
             $url .= '?'.http_build_query($getParams);
         }
 
@@ -96,7 +98,7 @@ class Curl
     public function post($url, array $postFields = array())
     {
         curl_setopt($this->curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($this->curl, CURLOPT_POST, 1);
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, $this->headers);
 
         // post field must be differently formated
@@ -116,12 +118,17 @@ class Curl
             break;
         }
 
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $postFields);
+        curl_setopt($this->curl, CURLOPT_POSTFIELDS, $postFields);
 
         $result = curl_exec($this->curl);
+        $code = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
+        $error = curl_error($this->curl);
+        curl_close($this->curl);
+
+        return $this->handleResponse($result, $code, $error);
     }
 
-    private function handleResponse($result, $code, $errors)
+    private function handleResponse($result, $code, $error)
     {
         $response = null;
         $this->code = $code;
@@ -149,7 +156,7 @@ class Curl
     public function verifyPeer($bool, $cacertPath = null)
     {
         curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, $bool);
-        
+
         if (!is_null($cacertPath)) {
             if (!is_file($cacertPath)) { throw new \Exception("Wrong path to certificate, {$cacertPath} does not exist"); }
             curl_setopt($this->curl, CURLOPT_CAINFO, $cacertPath);
@@ -202,23 +209,37 @@ class Curl
         return $this;
     }
 
-    public function setAuthorization($type, $token)
+    public function setAuthorization($tokenTypeAndString)
     {
-        $this->addHeader('Authorization: '.$type.'='.$token);
+        $this->addHeader('Authorization: '.$tokenTypeAndString);
 
         return $this;
     }
 
-    public function setAuthorizationBasic($user, $pass)
+    // @todo This does not seem to work, shoudl be the same as CURLOPT_USERPWD :(
+    public function setBasicAuthorization($userOrToken, $pass = null)
     {
-        $this->addHeader('Authorization: ' . base64_encode($user . ':' . $pass));
+        // Note that appending a colon to your API Secret tells cURL you intentionally
+        // want to leave the HTTP Basic Auth password blank. Otherwise, cURL will prompt you for a password.
+        $authString = (null === $pass) ? $userOrToken.':' : base64_encode($userOrToken.':'.$pass);
+
+        //$this->setAuthorization('Basic '.$authString);
+        $this->addHeader('Authorization: Basic '.$authString);
 
         return $this;
     }
 
-    public function addOption($name, $value)
+    public function setUserPwdAuthentication($userOrToken, $pass = null)
     {
-        curl_setopt($this->curl, $name, $value);
+        $authString = (null === $pass) ? $userOrToken : $userOrToken.':'.$pass;
+        curl_setopt($this->curl, CURLOPT_USERPWD, $authString);
+
+        return $this;
+    }
+
+    public function addOption($option, $value)
+    {
+        curl_setopt($this->curl, $option, $value);
 
         return $this;
     }
@@ -234,5 +255,12 @@ class Curl
         }
 
         return $this;
+    }
+
+    private function configureDefaultsOptions()
+    {
+        foreach ($this->defaultOptions as $option => $value) {
+            curl_setopt($this->curl, $option, $value);
+        }
     }
 }
