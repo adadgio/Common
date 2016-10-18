@@ -1,8 +1,8 @@
 <?php
 
-namespace Adadgio\Common;
+namespace Adadgio\Common\Http;
 
-class UrlHelper
+class Url
 {
     const HTTP = 'http://';
     const HTTPS = 'https://';

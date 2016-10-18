@@ -1,11 +1,10 @@
 <?php
 
-namespace Adadgio\Common;
+namespace Adadgio\Common\Http;
 
-class UserAgentList
+class UserAgent
 {
-
-    public static $userAgentList = array(
+    public static $userAgents = array(
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:11.0) Gecko/20100101 Firefox/11.0',
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36',
         'Mozilla/5.0 (iPhone; CPU iPhone OS 8_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12D508 Safari/600.1.4',
@@ -15,13 +14,13 @@ class UserAgentList
 
     public static function getAll()
     {
-        return static::$userAgentList;
+        return static::$userAgents;
     }
 
-    public static function getOneRandomize()
+    public static function getRandomAgent()
     {
-        $key = array_rand(array_keys(static::$userAgentList));
-        return static::$userAgentList[$key];
+        $key = array_rand(array_keys(static::$userAgents));
+        return static::$userAgents[$key];
     }
 
 }

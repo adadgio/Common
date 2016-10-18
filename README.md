@@ -11,7 +11,7 @@ composer require adadgio/common
 ## Table of contents
 
 1. [Curl](#curl)
-2. [UrlHelper](#url-helper)
+2. [Url](#url-helper)
 3. [ParamResolver](#param-resolver)
 4. [JsonResponse](#json-response)
 
@@ -20,40 +20,32 @@ composer require adadgio/common
 To do Curl requests (get or post) and return results
 
 ```php
-use Adadgio\Common\Curl;
+use Adadgio\Common\Http\Curl;
 
-$params = array(
-    'id'    => 102,
-);
 
 // GET request
 $curl = new Curl();
 $response = $curl
-    ->setUrl('http://example.com')
-    ->setParams($params)
-    ->get();
+    ->get('http://example.com', array('query_param_1' => 'query param value'));
 
-// Same GET request with a simple format
-$response = $curl->get('http://example.com', $params);
 
 // or POST request with params
 $curl = new Curl();
-$response = $curl->setUrl('http://example.com')
-    ->setParams($params)
-    ->setContentType('application/json')
-    ->post();
+$response = $curl
+    ->setContentType(Curl::JSON) // other options are JSON|XML|TEXT|FORL_URLENCODED|FORM_MULTIPART
+    ->post('http://example.com', array('post_field_1' => 'psot field value'));
 
 // POST request with more options
 $curl = new Curl();
-$response = $curl->setUrl('http://example.com')
-            ->setParams($params)
-            ->addParam('foo','bar')
-            ->addOption(CURLOPT_SSL_VERIFYPEER, true)
-            ->setContentType('application/json')
-            ->setAuthorization('username', 'pass')
-            ->setCookie()
-            ->setRandomUserAgent()
-            ->post();
+$response = $curl
+    ->setContentType(Curl::JSON) // other options are JSON|XML|TEXT|FORL_URLENCODED|FORM_MULTIPART
+    ->setAuthorizationBasic('Token', 'user', 'pass') // or ->setAuthorization('Basic', base64_encode('user:pass'))
+    // or ->setAuthorization('Token', yO3my4To3en)
+    ->setCookies(true)
+    // ->addHeader('X-Custom-Header', 'CUst0mApiK3y')
+    ->verifyHost(false) // or ->addOption(CURLOPT_SSL_VERIFYHOST, false)
+    ->verifyPeer(true, "/home/my/server/cacert.pem") // second param is empty but you should set it in php.ini
+    ->post('http://example.com', array('post_field_1' => 'psot field value'));
 ```
 
 ## <a name="url-helper"></a>UrlHelper
