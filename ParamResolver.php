@@ -2,6 +2,7 @@
 
 namespace Adadgio\Common;
 
+// Replaces 360 medical \Medical\CoreBundle\Component\HttpQuery\ParamResolver
 class ParamResolver
 {
     /**
