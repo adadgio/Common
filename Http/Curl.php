@@ -236,6 +236,13 @@ class Curl
 
         return $this;
     }
+    
+    public function setConnectTimeout($timeout)
+    {
+        curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT, $timeout);
+
+        return $this;
+    }
 
     public function addOption($option, $value)
     {
