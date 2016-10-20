@@ -4,8 +4,118 @@ namespace Adadgio\Common\Http;
 
 class Url
 {
+    const WS = 'ws://';
+    const WSS = 'wss://';
+    const FTP = 'ftp://';
+    const FTPS = 'ftps://';
     const HTTP = 'http://';
     const HTTPS = 'https://';
+
+    protected $url;
+    protected $partials;
+
+    public function __construct($url)
+    {
+        $this->url = $url;
+        $this->partials = parse_url($this->url);
+    }
+
+    /**
+     * Get full input url.
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Get domain host from url.
+     *
+     * @param  string
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->partials['host'];
+    }
+
+    /**
+     * Get full input url.
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+        return rtrim($this->partials['path'], '/').'/';
+    }
+
+    /**
+     * Get full input url.
+     *
+     * @return string
+     */
+    public function getHashtag()
+    {
+        return $this->partials['fragment'];
+    }
+
+    /**
+     * Get query as string without "?"
+     *
+     * @return string
+     */
+    public function getQueryString()
+    {
+        return parse_str($this->partials['query']);
+    }
+    
+    /**
+     * Get query array
+     *
+     * @return array
+     */
+    public function getQueryArray()
+    {
+        return $this->partials['query'];
+    }
+
+    /**
+     * Get protocol from url.
+     *
+     * @param  string
+     * @return string
+     */
+    public function getProtocol($with = null)
+    {
+        return $this->partials['scheme'];
+    }
+
+    /**
+     * Get only domain name without subdomain.
+     *
+     * @param  string
+     * @return string
+     */
+    public function getDomain()
+    {
+        $hostParts = explode('.', $this->getHost());
+        array_shift($hostParts);
+
+        return implode('.', $hostParts);
+    }
+
+    /**
+     * Get full hostname domain and protocol.
+     *
+     * @param  string
+     * @return string
+     */
+    public function getSchemeAndHttpHost()
+    {
+        return $this->getProtocol().'://'.$this->getHost();
+    }
 
     /**
      * Normalizes a relative or absolute link.
@@ -13,17 +123,17 @@ class Url
      * @param string
      * @return string
      */
-    public static function normalize($link, $referer)
+    public function normalize($link, $referer)
     {
         $host = self::removeProtocol(self::rtrim($referer));
-        $protocol = self::getProtocol($referer, '://');
+        $protocol = $this->getProtocol($referer, '://');
 
-        if (self::isRelative($link)) {
+        if ($this->isRelative($link)) {
             $link = $protocol.$host.'/'.self::ltrim($link);
         } else {
 
-            if (self::isProtocolLess($link)) {
-                $link = $protocol.self::removeProtocol($link);
+            if ($this->isProtocolLess($link)) {
+                $link = $protocol.$this->removeProtocol($link);
             }
         }
 
@@ -38,40 +148,7 @@ class Url
      */
     public static function removeProtocol($url)
     {
-        return str_replace(array('http://', 'https://', '//'), '', $url);
-    }
-
-    /**
-     * Get protocol from url.
-     *
-     * @param  string
-     * @return string
-     */
-    public static function getProtocol($url, $with = null)
-    {
-        return parse_url($url, PHP_URL_SCHEME).$with;
-    }
-
-    /**
-     * Get domain host from url.
-     *
-     * @param  string
-     * @return string
-     */
-    public static function getHost($url)
-    {
-        return self::getDomain($url);
-    }
-
-    /**
-     * Get domain from url.
-     *
-     * @param  string
-     * @return string
-     */
-    public static function getDomain($url)
-    {
-        return parse_url($url, PHP_URL_HOST);
+        return str_replace(array('http://', 'https://', '//', 'ws://', 'ftp://'), '', $url);
     }
 
     /**
@@ -80,9 +157,9 @@ class Url
      * @param  string
      * @return boolean
      */
-    public static function isAnchor($url)
+    public function hasAnchor()
     {
-        if (strpos($url, '#') > -1) {
+        if (strpos($this->url, '#') > -1) {
             return true;
         } else {
             return false;
@@ -128,9 +205,9 @@ class Url
      * @param  string
      * @return boolean
      */
-    public static function isProtocolLess($url)
+    public function isProtocolLess()
     {
-        if (preg_match('~^\/\/~i', $url)) {
+        if (preg_match('~^\/\/~i', $this->url)) {
             return true;
         } else {
             return false;
@@ -143,9 +220,9 @@ class Url
      * @param  string
      * @return boolean
      */
-    public static function isRelative($url)
+    public function isRelative()
     {
-        if (preg_match('~^https?:\/\/~i', $url) OR preg_match('~^\/\/~i', $url)) {
+        if (preg_match('~^https?:\/\/~i', $this->url) OR preg_match('~^\/\/~i', $this->url)) {
             return false;
         } else {
             return true;
@@ -158,18 +235,18 @@ class Url
      * @param  string
      * @return boolean
      */
-    public static function isAbsolute($url)
+    public function isAbsolute()
     {
-        return !self::isRelative($url);
+        return !$this->isRelative($this->url);
     }
 
     /**
      * @param string url
      * @param boolean
      */
-    public static function isRemote($url)
+    public function isRemote()
     {
-        $parsed = parse_url($url);
+        $parsed = parse_url($this->url);
 
         return (
             isset($parsed['scheme'])

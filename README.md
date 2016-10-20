@@ -101,26 +101,25 @@ $headers = array();
 $array = JsonResponse::fire($data, $code, $headers);
 ```
 
-## <a name="human-date"></a>HumanDate
+## <a name="human-date"></a>Since
 
 This tool return an human date to display, like few some seconds...
 Default referential is the current date and time, a custom referential can be set in second parameter.
 
 ```php
-use Adadgio\Common\HumanDate;
+use Adadgio\Common\Moment\Since;
+// Examples with referential date: "2016-07-29 12:00:00"
 
-// Examples with referential date: 2016-07-29 12:00:00
-
-HumanDate::format(new \DateTime('2016-06-29 09:00:00'));
+Since::format(new \DateTime('2016-06-29 09:00:00'));
 // 09:00
 
-HumanDate::format(new \DateTime('2016-07-28 22:00:00'));
+Since::format(new \DateTime('2016-07-28 22:00:00'));
 // Yesterday
 
-HumanDate::format(new \DateTime('2016-07-29 12:00:00'));
+Since::format(new \DateTime('2016-07-29 12:00:00'));
 // Now
 
-HumanDate::format(new \DateTime('2016-07-29 11:59:55'));
+Since::format(new \DateTime('2016-07-29 11:59:55'));
 // 5 seconds
 
 ```
