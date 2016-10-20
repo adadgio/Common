@@ -11,6 +11,7 @@ class Curl
     const XML = 'xml';
     const FORM_MULTIPART = 'form_multipart';
     const FORM_URLENCODED= 'form_urlencoded';
+    const RANDOM_USERAGENT = true;
 
     /**
      * Defaut curl options
@@ -30,6 +31,17 @@ class Curl
         'json' => 'application/json',
         'form_multipart' => 'multipart/form-data',
         'form_urlencoded' => 'application/x-www-form-urlencoded',
+    );
+
+    /**
+     * List of available user agents for randomizing.
+     */
+    private $userAgents = array(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:11.0) Gecko/20100101 Firefox/11.0',
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36',
+        'Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0',
+        'Mozilla/5.0 (Windows NT 6.1; rv:49.0) Gecko/20100101 Firefox/49.0',
     );
 
     /**
@@ -165,9 +177,16 @@ class Curl
         return $this;
     }
 
-    public function setUserAgent($random = true)
+    public function setUserAgent($userAgent)
     {
-        // @todo
+        if ($userAgent === static::RANDOM_USERAGENT) {
+            $key = array_rand($this->userAgents);
+            curl_setopt($this->curl, CURLOPT_USERAGENT, $this->userAgents[$key]);
+        } else {
+            curl_setopt($this->curl, CURLOPT_USERAGENT, $bool);
+        }
+
+        return $this;
     }
 
     public function setContentType($contentType)
@@ -236,7 +255,7 @@ class Curl
 
         return $this;
     }
-    
+
     public function setConnectTimeout($timeout)
     {
         curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT, $timeout);
