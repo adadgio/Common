@@ -12,14 +12,15 @@ class Curl
     const FORM_MULTIPART = 'form_multipart';
     const FORM_URLENCODED= 'form_urlencoded';
     const RANDOM_USERAGENT = true;
-
+    
     /**
      * Defaut curl options
      */
     protected $defaultOptions = array(
         CURLOPT_RETURNTRANSFER  => 1,
         CURLOPT_FOLLOWLOCATION  => 1,
-        CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:11.0) Gecko/20100101 Firefox/11.0',
+        CURLOPT_IPRESOLVE       => CURL_IPRESOLVE_V4,
+        CURLOPT_USERAGENT       => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:11.0) Gecko/20100101 Firefox/11.0',
     );
 
     /**
