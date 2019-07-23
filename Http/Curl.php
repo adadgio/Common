@@ -12,7 +12,7 @@ class Curl
     const FORM_MULTIPART = 'form_multipart';
     const FORM_URLENCODED= 'form_urlencoded';
     const RANDOM_USERAGENT = true;
-    
+
     /**
      * Defaut curl options
      */
@@ -178,6 +178,39 @@ class Curl
     {
         curl_setopt($this->curl, CURLOPT_URL, $url);
         curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
+        curl_setopt($this->curl, CURLOPT_HTTPHEADER, $this->headers);
+
+        // post field must be differently formated
+        // depending on content type
+        switch ($this->contentType) {
+            case static::JSON:
+                $putFields = json_encode($putFields);
+            break;
+            case static::FORM_URLENCODED:
+                $putFields = http_build_query($putFields);
+            break;
+            case static::FORM_MULTIPART:
+                // post fields stay as array here
+            break;
+            default:
+                // nothing special
+            break;
+        }
+
+        curl_setopt($this->curl, CURLOPT_POSTFIELDS, $putFields);
+
+        $result = curl_exec($this->curl);
+        $code = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
+        $error = curl_error($this->curl);
+        curl_close($this->curl);
+
+        return $this->handleResponse($result, $code, $error);
+    }
+
+    public function delete($url, array $putFields = array())
+    {
+        curl_setopt($this->curl, CURLOPT_URL, $url);
+        curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, $this->headers);
 
         // post field must be differently formated
